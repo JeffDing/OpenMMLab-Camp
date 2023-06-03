@@ -18,12 +18,12 @@
 需提交的测试集评估指标（不能低于baseline指标的50%）**
 
 #### 目标检测Baseline模型（RTMDet-tiny）
-![baseline-RTMDet-tiny](.pic/baseline-RTMDet-tiny.png)
+![baseline-RTMDet-tiny](pic/baseline-RTMDet-tiny.png)
 
 #### 关键点检测Baseline模型（RTMPose-s）
-![baseline-RTMPose-s](.pic/baseline-RTMPose-s.png)
+![baseline-RTMPose-s](pic/baseline-RTMPose-s.png)
 
 #### 数据集
 耳朵穴位关键点检测数据集，MS COCO格式，划分好了训练集和测试集，并写好了样例config配置文件
 标注人：张子豪、田文博
-![ear-dataset](.pic/ear-dataset.png)
+![ear-dataset](pic/ear-dataset.png)
