@@ -6,7 +6,7 @@ TO DO LIST：
 1. Labelme 标注语义分割数据集（子豪兄已经帮你完成了）
 2. 划分训练集和测试集（子豪兄已经帮你完成了）
 3. Labelme 标注转 Mask 灰度图格式（子豪兄已经帮你完成了）
-4 .使用 MMSegmentation 算法库，撰写 config 配置文件，训练 PSPNet 语义分割算法
+4. 使用 MMSegmentation 算法库，撰写 config 配置文件，训练 PSPNet 语义分割算法
 5. 提交测试集评估指标
 6. 使用数据集之外的西瓜图片和视频进行预测，并存储展示预测的结果。
 7. 训练 Segformer 语义分割算法，提交测试集评估指标
