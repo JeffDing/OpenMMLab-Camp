@@ -21,6 +21,7 @@ from .stare import STAREDataset
 from .synapse import SynapseDataset
 from .DubaiDataset import DubaiDataset
 from .StanfordBackgroundDataset import StanfordBackgroundDataset
+from .WaterMemlon import WaterMemlon
 # yapf: disable
 from .transforms import (CLAHE, AdjustGamma, BioMedical3DPad,
                          BioMedical3DRandomCrop, BioMedical3DRandomFlip,
@@ -50,5 +51,6 @@ __all__ = [
     'DecathlonDataset', 'LIPDataset', 'ResizeShortestEdge',
     'BioMedicalGaussianNoise', 'BioMedicalGaussianBlur',
     'BioMedicalRandomGamma', 'BioMedical3DPad', 'RandomRotFlip',
-    'SynapseDataset', 'DubaiDataset', 'StanfordBackgroundDataset'
+    'SynapseDataset', 'DubaiDataset', 'StanfordBackgroundDataset', 
+    'WaterMemlon'
 ]
