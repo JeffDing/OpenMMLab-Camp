@@ -1,4 +1,4 @@
-norm_cfg = dict(type='SyncBN', requires_grad=True)
+norm_cfg = dict(type='BN', requires_grad=True)
 data_preprocessor = dict(
     type='SegDataPreProcessor',
     mean=[123.675, 116.28, 103.53],
@@ -16,7 +16,7 @@ model = dict(
         bgr_to_rgb=True,
         pad_val=0,
         seg_pad_val=255,
-        size=(512, 1024)),
+        size=(256, 256)),
     pretrained='open-mmlab://resnet50_v1c',
     backbone=dict(
         type='ResNetV1c',
@@ -25,7 +25,7 @@ model = dict(
         out_indices=(0, 1, 2, 3),
         dilations=(1, 1, 2, 4),
         strides=(1, 2, 1, 1),
-        norm_cfg=dict(type='SyncBN', requires_grad=True),
+        norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=False,
         style='pytorch',
         contract_dilation=True),
@@ -36,8 +36,8 @@ model = dict(
         channels=512,
         pool_scales=(1, 2, 3, 6),
         dropout_ratio=0.1,
-        num_classes=19,
-        norm_cfg=dict(type='SyncBN', requires_grad=True),
+        num_classes=2,
+        norm_cfg=dict(type='BN', requires_grad=True),
         align_corners=False,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
@@ -49,32 +49,31 @@ model = dict(
         num_convs=1,
         concat_input=False,
         dropout_ratio=0.1,
-        num_classes=19,
-        norm_cfg=dict(type='SyncBN', requires_grad=True),
+        num_classes=2,
+        norm_cfg=dict(type='BN', requires_grad=True),
         align_corners=False,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=0.4)),
     train_cfg=dict(),
     test_cfg=dict(mode='whole'))
-dataset_type = 'CityscapesDataset'
-data_root = 'data/cityscapes/'
-crop_size = (512, 1024)
+dataset_type = 'StanfordBackgroundDataset'
+data_root = 'data/Glomeruli-dataset'
+crop_size = (256, 256)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(
         type='RandomResize',
-        scale=(2048, 1024),
+        scale=(320, 240),
         ratio_range=(0.5, 2.0),
         keep_ratio=True),
-    dict(type='RandomCrop', crop_size=(512, 1024), cat_max_ratio=0.75),
+    dict(type='RandomCrop', crop_size=(256, 256), cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
-    dict(type='PhotoMetricDistortion'),
     dict(type='PackSegInputs')
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', scale=(2048, 1024), keep_ratio=True),
+    dict(type='Resize', scale=(320, 240), keep_ratio=True),
     dict(type='LoadAnnotations'),
     dict(type='PackSegInputs')
 ]
@@ -123,60 +122,59 @@ tta_pipeline = [
                     }]])
 ]
 train_dataloader = dict(
-    batch_size=2,
+    batch_size=8,
     num_workers=2,
     persistent_workers=True,
     sampler=dict(type='InfiniteSampler', shuffle=True),
     dataset=dict(
-        type='CityscapesDataset',
-        data_root='data/cityscapes/',
-        data_prefix=dict(
-            img_path='leftImg8bit/train', seg_map_path='gtFine/train'),
+        type='StanfordBackgroundDataset',
+        data_root='data/Glomeruli-dataset',
+        data_prefix=dict(img_path='images', seg_map_path='masks'),
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(type='LoadAnnotations'),
             dict(
                 type='RandomResize',
-                scale=(2048, 1024),
+                scale=(320, 240),
                 ratio_range=(0.5, 2.0),
                 keep_ratio=True),
-            dict(type='RandomCrop', crop_size=(512, 1024), cat_max_ratio=0.75),
+            dict(type='RandomCrop', crop_size=(256, 256), cat_max_ratio=0.75),
             dict(type='RandomFlip', prob=0.5),
-            dict(type='PhotoMetricDistortion'),
             dict(type='PackSegInputs')
-        ]))
+        ],
+        ann_file='splits/train.txt'))
 val_dataloader = dict(
     batch_size=1,
     num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
-        type='CityscapesDataset',
-        data_root='data/cityscapes/',
-        data_prefix=dict(
-            img_path='leftImg8bit/val', seg_map_path='gtFine/val'),
+        type='StanfordBackgroundDataset',
+        data_root='data/Glomeruli-dataset',
+        data_prefix=dict(img_path='images', seg_map_path='masks'),
         pipeline=[
             dict(type='LoadImageFromFile'),
-            dict(type='Resize', scale=(2048, 1024), keep_ratio=True),
+            dict(type='Resize', scale=(320, 240), keep_ratio=True),
             dict(type='LoadAnnotations'),
             dict(type='PackSegInputs')
-        ]))
+        ],
+        ann_file='splits/val.txt'))
 test_dataloader = dict(
     batch_size=1,
     num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
-        type='CityscapesDataset',
-        data_root='data/cityscapes/',
-        data_prefix=dict(
-            img_path='leftImg8bit/val', seg_map_path='gtFine/val'),
+        type='StanfordBackgroundDataset',
+        data_root='data/Glomeruli-dataset',
+        data_prefix=dict(img_path='images', seg_map_path='masks'),
         pipeline=[
             dict(type='LoadImageFromFile'),
-            dict(type='Resize', scale=(2048, 1024), keep_ratio=True),
+            dict(type='Resize', scale=(320, 240), keep_ratio=True),
             dict(type='LoadAnnotations'),
             dict(type='PackSegInputs')
-        ]))
+        ],
+        ann_file='splits/val.txt'))
 val_evaluator = dict(type='IoUMetric', iou_metrics=['mIoU'])
 test_evaluator = dict(type='IoUMetric', iou_metrics=['mIoU'])
 default_scope = 'mmseg'
@@ -191,7 +189,7 @@ visualizer = dict(
     name='visualizer')
 log_processor = dict(by_epoch=False)
 log_level = 'INFO'
-load_from = None
+load_from = 'configs/pspnet/pspnet_r50-d8_512x1024_40k_cityscapes_20200605_003338-2966598c.pth'
 resume = False
 tta_model = dict(type='SegTTAModel')
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
@@ -208,13 +206,15 @@ param_scheduler = [
         end=40000,
         by_epoch=False)
 ]
-train_cfg = dict(type='IterBasedTrainLoop', max_iters=40000, val_interval=4000)
+train_cfg = dict(type='IterBasedTrainLoop', max_iters=800, val_interval=400)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 default_hooks = dict(
     timer=dict(type='IterTimerHook'),
-    logger=dict(type='LoggerHook', interval=50, log_metric_by_epoch=False),
+    logger=dict(type='LoggerHook', interval=100, log_metric_by_epoch=False),
     param_scheduler=dict(type='ParamSchedulerHook'),
-    checkpoint=dict(type='CheckpointHook', by_epoch=False, interval=4000),
+    checkpoint=dict(type='CheckpointHook', by_epoch=False, interval=400),
     sampler_seed=dict(type='DistSamplerSeedHook'),
     visualization=dict(type='SegVisualizationHook'))
+work_dir = './work_dirs/tutorial'
+randomness = dict(seed=0)

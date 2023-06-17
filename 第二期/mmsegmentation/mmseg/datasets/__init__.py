@@ -20,6 +20,7 @@ from .potsdam import PotsdamDataset
 from .stare import STAREDataset
 from .synapse import SynapseDataset
 from .DubaiDataset import DubaiDataset
+from .StanfordBackgroundDataset import StanfordBackgroundDataset
 # yapf: disable
 from .transforms import (CLAHE, AdjustGamma, BioMedical3DPad,
                          BioMedical3DRandomCrop, BioMedical3DRandomFlip,
@@ -49,5 +50,5 @@ __all__ = [
     'DecathlonDataset', 'LIPDataset', 'ResizeShortestEdge',
     'BioMedicalGaussianNoise', 'BioMedicalGaussianBlur',
     'BioMedicalRandomGamma', 'BioMedical3DPad', 'RandomRotFlip',
-    'SynapseDataset', 'DubaiDataset'
+    'SynapseDataset', 'DubaiDataset', 'StanfordBackgroundDataset'
 ]
