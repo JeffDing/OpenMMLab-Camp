@@ -14,7 +14,7 @@
 
 5. 按照视频中 notebook 步骤，对 demo 图片进行特征图可视化和 Box AM 可视化
 
-* 将预测结果保存到github仓库中，readme中呈现出来
+6. 将预测结果保存到github仓库中，readme中呈现出来
 
 ## 需提交的测试集评估指标（不能低于baseline指标的50%）
 
